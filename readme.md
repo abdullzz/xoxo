@@ -1,5 +1,8 @@
 # XOXO Readme #
 
+## about ##
+XOXO game is a turn based game where there are 2 player, each get their own letter, usually player 1 got X letter, where player 2 got O letter. both of them compete to achieve 5 pair of their own letter lining up either horizontally, vertically or sideways. By that means, they can also block each other out by cancelling their opponent line to achieve 5 pair. it's a fun strategic game. But this time i want to append some handicap and challenges setting to further customize the current game logic. hope you guys enjoy it.
+
 ## prerequisite ##
 - [```optional```] Visual Studio Code
 - [```mandatory```] install Python (3.6.8), throughout this document i use python36 alias
