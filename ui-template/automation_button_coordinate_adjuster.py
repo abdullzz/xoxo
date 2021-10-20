@@ -8,6 +8,7 @@ class Core:
         self.tree = None
         self.root = None
         self.property = ".//property[contains(@name,'coordinate')]"
+        self.item = ".//item[@row]"
 
     def start(self):
         print(">>>>>> "+sys.argv[0].split(".py")[0]+ " started <<<<<\n")
@@ -33,13 +34,35 @@ class Core:
         list = self.root.xpath("count({})".format(self.property))
         if not bool(int(float(list)) == 121):
             print("expected 121 button, got : {}".format(int(float(list))))
-        list = self.root.xpath(self.property)
+        lists = self.root.xpath(self.item)
+        for x in lists:
+            expected_row = str(int(x.get('row')))
+            expected_column = str(int(x.get('column')))
+            coordinate = x.xpath(self.property)[0].xpath('.//string')[0]
+            actual_row = coordinate
+            actual_column = coordinate
+            print("Expected Coordinate : {}.{} || Got : {}.{}".format(
+                expected_column,
+                expected_row,
+                str(actual_column.text.split('.')[0]),
+                str(actual_row.text.split('.')[1])
+            ))
+            coordinate.text = "{}.{}".format(expected_column, expected_row)
 
     def printTree(self):
         os.remove(self.path+'.xml')
-        # self.tree.write("output.xml")
+        self.tree.write("xoxo.xml")
+
+    def embedXMLEncoding(self):
+        with open(self.path+'.xml','r') as f:
+            data = f.read()
+        with open(self.path+'.ui', 'w') as f:
+            header = '<?xml version="1.0" encoding="UTF-8"?>\n'
+            f.write(header+data+"\n")
+        os.remove(self.path+'.xml')
 
 core = Core()
 core.start()
 core.printTree()
+core.embedXMLEncoding()
 print("<<<<< ended >>>>>>",end="")
