@@ -31,3 +31,13 @@ python36 -m PyQt5.uic.pyuic -x xoxo.ui -o xoxo.py
 
 ## warnings ##
 - do not modify the ui file content directly, it may cause error
+
+## developer footnote ##
+- if we want to initiate gitignore on new project, use this command after creating the ```.gitignore``` file
+```
+git config --global core.excludesFile ~/.gitignore
+```
+- if we want to check the reason behind some files are ignored by ```.gitignore``` file, use this command
+```
+git check-ignore -v xoxo.xml
+```
