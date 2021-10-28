@@ -27,12 +27,9 @@ from fontTools.ttLib import TTFont
 import re
 
 class MainWindow(QtWidgets.QMainWindow):
-    def __init__(self):
-        super(MainWindow, self).__init__() # Call the inherited classes __init__ method
-        self.set_and_load_ui()
-
-    def set_and_load_ui(self):
-        self.ui = QUiLoader().load('main.ui', self)
+    def __init__(self, parent=None):
+        super(MainWindow, self).__init__(parent)
+        self.ui = QUiLoader().load('main.ui', parent)
 
 class Main(MainWindow):
     def __init__(self):
@@ -51,6 +48,7 @@ class Main(MainWindow):
     def configure_header(self):
         self.ui.timeLabel.setText("Time Left: Unlimited")
         self.ui.resetButton.clicked.connect(lambda: self.reset_game())
+        self.ui.mainmenuButton.clicked.connect(lambda: self.messagebox_win("test"))
 
     def configure_footer(self):
         self.ui.statusLabel.setText("First to Five Pair Win!")
@@ -112,6 +110,7 @@ class Main(MainWindow):
         self.ui.turnLabel.setText("Game Ended!")
         self.ui.statusLabel.setText("{} PLAYER WIN!".format(lastWord))
         self.disable_arena_button()
+        self.messagebox_win(lastWord)
 
     def check_win(self):
         def check_horizontal(lastPosition,lastWord):
@@ -274,17 +273,29 @@ class Main(MainWindow):
             check_northwest_southeast(lastPosition,lastWord)
             check_northeast_southwest(lastPosition,lastWord)
 
+    def messagebox_win(self,x=""):
+        msg = QMessageBox(self)
+        msg.setIcon(QMessageBox.Information)
+        msg.setText("Player '{}' Win!".format(x))
+        msg.setInformativeText("you can reset the game or go back to main menu")
+        msg.setWindowTitle("Congratulation")
+        msg.exec_()
+
 class Daemon():
     def __init__(self):
         self.app = None
         self.mainWindow = None
-        self.exit_code = -10050
+        self.exit_code = -15123123
 
     def run(self):
-        self.app = QtWidgets.QApplication(sys.argv)
+        if not QtWidgets.QApplication.instance():
+            self.app = QtWidgets.QApplication(sys.argv)
+        else:
+            self.app = QtWidgets.QApplication.instance() 
         self.mainWindow = Main()
         self.mainWindow.ui.show()
         self.exit_code = (self.app.exec_())
+        print(self.exit_code,"EXIT_CODE_REBOOT")
 
     def run_ui_template_only(self):
         self.app = QtWidgets.QApplication(sys.argv)
